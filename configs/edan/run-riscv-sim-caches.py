@@ -39,11 +39,11 @@ default_cpu_model = "RiscvTimingSimpleCPU"
 default_cpu_frequency = "3.0GHz"
 default_dram_size = "16GB"
 default_dram_latency = "10ns"
-default_l1d_size = "1MB"
+default_l1d_size = "64kB"
 default_l1d_latency = 4
-default_l1i_size = "1MB"
+default_l1i_size = "16kB"
 default_l1i_latency = 4
-default_l2_size = "4MB"
+default_l2_size = "256kB"
 default_l2_latency = 20
 
 

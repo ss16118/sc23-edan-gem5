@@ -9,7 +9,7 @@
  * C = A x B = [[1, 2], [2, 1]]
  */
 #include <stdio.h>
-#define N 256
+#define N 32
 
 /**
  * Main computation kernel that multiplies two square matrices
