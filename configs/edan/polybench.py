@@ -47,17 +47,48 @@ script_path = os.path.join(
     "run-riscv-sim-caches.py"
 )
 
-gem5_config = "--binary"
 
-for subdir, dirs, files in os.walk(binary_dir):
-    for file in files:
-        binary_name = os.path.join(subdir, file)
-        for i in range(niters):
-            with open(binary_name + "." + str(i) + ".log", "w") as log:
-                cmd = [gem5_path, script_path,
-                       gem5_config, binary_name,
-                       "--cpu_model", "RiscvO3CPU",
-                       "--cpu_frequency", "1GHz",
-                       "--enable_caches"]               
-                print(cmd[1])
-                subprocess.call(cmd, stdout=log)
+def measure_sim_time():
+    for subdir, dirs, files in os.walk(binary_dir):
+        for file in files:
+            binary_name = os.path.join(subdir, file)
+            for i in range(niters):
+                with open(binary_name + "." + str(i) + ".log", "w") as log:
+                    cmd = [gem5_path, script_path,
+                           "--binary", binary_name,
+                           "--cpu_model", "RiscvO3CPU",
+                           "--cpu_frequency", "1GHz",
+                           "--enable_caches"]               
+
+                    print(binary_name, i)
+                    subprocess.call(cmd, stdout=log, stderr=log)
+
+
+def measure_dram_latency_impact():
+    blacklist = ["adi", "fdtd-2d",  "fdtd-apml",
+                 "jacobi-1d-imper", "jacobi-2d-imper", "seidel-2d",
+                 "correlation", "covariance", "floyd-warshall", "reg_detect"]
+    dram_latencies = ["10", "15", "20", "25", "30", "35", "40", "45", "50"]
+    cpus = ["RiscvO3CPU", "RiscvTimingSimpleCPU"]
+
+    for subdir, dirs, files in os.walk(binary_dir):
+        for file in files:
+            if file in blacklist:
+                continue
+
+            binary_name = os.path.join(subdir, file)
+
+            for cpu in cpus:
+                for latency in dram_latencies:
+                    with open(binary_name + ".dram_lat." + latency + ".log", "w") as log:
+                        cmd = [gem5_path, script_path,
+                               "--enable_caches",
+                               "--cpu_model", cpu, "--cpu_frequency", "1GHz",
+                               "--binary", binary_name,
+                               "--dram_latency", latency + "ns"]
+
+                        print(binary_name, cpu, latency)
+                        subprocess.call(cmd, stdout=log, stderr=log)
+
+#measure_sim_time()
+#measure_dram_latency_impact()
