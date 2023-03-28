@@ -68,7 +68,10 @@ def measure_dram_latency_impact():
     blacklist = ["adi", "fdtd-2d",  "fdtd-apml",
                  "jacobi-1d-imper", "jacobi-2d-imper", "seidel-2d",
                  "correlation", "covariance", "floyd-warshall", "reg_detect"]
-    dram_latencies = ["10", "15", "20", "25", "30", "35", "40", "45", "50"]
+#    dram_latencies = ["10", "15", "20", "25", "30", "35", "40", "45", "50"]
+    dram_latencies = ["55", "60", "65", "70", "75", "80", "85", "90", "95",
+                      "100", "105", "110", "115", "120", "125", "130", "135", "140", "145", "150",
+                      "155", "160", "165", "170", "175", "180", "185", "190", "195", "200"]
     cpus = ["RiscvO3CPU", "RiscvTimingSimpleCPU"]
 
     for subdir, dirs, files in os.walk(binary_dir):
@@ -91,4 +94,4 @@ def measure_dram_latency_impact():
                         subprocess.call(cmd, stdout=log, stderr=log)
 
 #measure_sim_time()
-#measure_dram_latency_impact()
+measure_dram_latency_impact()
