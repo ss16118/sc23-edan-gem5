@@ -106,13 +106,14 @@ def init_sim_env(params):
         system.cpu.dcache = L1DCache(params)
         system.cpu.icache.connectCPU(system.cpu)
         system.cpu.dcache.connectCPU(system.cpu)
-
-        system.l2bus = L2XBar()
-        system.cpu.icache.connectBus(system.l2bus)
-        system.cpu.dcache.connectBus(system.l2bus)
-        system.l2cache = L2Cache(params)
-        system.l2cache.connectCPUSideBus(system.l2bus)
-        system.l2cache.connectMemSideBus(system.membus)
+        system.cpu.icache.connectBus(system.membus)
+        system.cpu.dcache.connectBus(system.membus)
+#        system.l2bus = L2XBar()
+#        system.cpu.icache.connectBus(system.l2bus)
+#        system.cpu.dcache.connectBus(system.l2bus)
+#        system.l2cache = L2Cache(params)
+#        system.l2cache.connectCPUSideBus(system.l2bus)
+#        system.l2cache.connectMemSideBus(system.membus)
 
     else:
         system.cpu.icache_port = system.membus.cpu_side_ports

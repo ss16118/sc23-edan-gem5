@@ -28,6 +28,7 @@ for subdir, dirs, files in os.walk(polybench_root):
             polybench_root + "/utilities/polybench.c " + \
             os.path.join(subdir, file) + \
             " -D" + dataset_type + \
+            " -DPOLYBENCH_TIME " + \
             " -o " + binary_dir + file[:-2] + \
             " -lm "
 
@@ -67,13 +68,13 @@ def measure_sim_time():
 def measure_dram_latency_impact():
     blacklist = ["adi", "fdtd-2d",  "fdtd-apml",
                  "jacobi-1d-imper", "jacobi-2d-imper", "seidel-2d",
-                 "correlation", "covariance", "floyd-warshall", "reg_detect"]
-#    dram_latencies = ["10", "15", "20", "25", "30", "35", "40", "45", "50"]
-    dram_latencies = ["55", "60", "65", "70", "75", "80", "85", "90", "95",
-                      "100", "105", "110", "115", "120", "125", "130", "135", "140", "145", "150",
+                 "correlation", "covariance", "floyd-warshall", "reg_detect", "dynprog", "lu", "ludcmp", "gramschmidt", "durbin"]
+    dram_latencies = ["10", "15", "20", "25", "30", "35", "40", "45", "50",
+                      "55", "60", "65", "70", "75", "80", "85", "90", "95", "100",
+                      "105", "110", "115", "120", "125", "130", "135", "140", "145", "150",
                       "155", "160", "165", "170", "175", "180", "185", "190", "195", "200"]
-    cpus = ["RiscvO3CPU", "RiscvTimingSimpleCPU"]
 
+    cpus = ["RiscvO3CPU"]
     for subdir, dirs, files in os.walk(binary_dir):
         for file in files:
             if file in blacklist:
@@ -83,7 +84,7 @@ def measure_dram_latency_impact():
 
             for cpu in cpus:
                 for latency in dram_latencies:
-                    with open(binary_name + ".dram_lat." + latency + ".log", "w") as log:
+                    with open(binary_name + "." + cpu + ".dram_lat_l1only." + latency + ".log", "w") as log:
                         cmd = [gem5_path, script_path,
                                "--enable_caches",
                                "--cpu_model", cpu, "--cpu_frequency", "1GHz",
