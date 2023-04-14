@@ -22,7 +22,7 @@ for subdir, dirs, files in os.walk(polybench_root):
     for file in files:
         if ".h" in file:
             continue
-        
+
         cmd = "riscv64-unknown-linux-gnu-gcc -static -O3 " + \
             " -I " + polybench_root + "/utilities/ " + \
             polybench_root + "/utilities/polybench.c " + \
@@ -59,7 +59,7 @@ def measure_sim_time():
                            "--binary", binary_name,
                            "--cpu_model", "RiscvO3CPU",
                            "--cpu_frequency", "1GHz",
-                           "--enable_caches"]               
+                           "--enable_caches"]
 
                     print(binary_name, i)
                     subprocess.call(cmd, stdout=log, stderr=log)
@@ -68,7 +68,8 @@ def measure_sim_time():
 def measure_dram_latency_impact():
     blacklist = ["adi", "fdtd-2d",  "fdtd-apml",
                  "jacobi-1d-imper", "jacobi-2d-imper", "seidel-2d",
-                 "correlation", "covariance", "floyd-warshall", "reg_detect", "dynprog", "lu", "ludcmp", "gramschmidt", "durbin"]
+                 "correlation", "covariance", "floyd-warshall", "reg_detect",
+                 "dynprog", "lu", "ludcmp", "gramschmidt", "durbin"]
     dram_latencies = ["10", "15", "20", "25", "30", "35", "40", "45", "50",
                       "55", "60", "65", "70", "75", "80", "85", "90", "95", "100",
                       "105", "110", "115", "120", "125", "130", "135", "140", "145", "150",
@@ -81,9 +82,7 @@ def measure_dram_latency_impact():
         for file in files:
             if file in blacklist:
                 continue
-
             binary_name = os.path.join(subdir, file)
-
             for cpu in cpus:
                 for latency in dram_latencies:
                     with open(binary_name + "." + cpu + ".dram_lat_l1only." + latency + ".log", "w") as log:
@@ -96,5 +95,5 @@ def measure_dram_latency_impact():
                         print(binary_name, cpu, latency)
                         subprocess.call(cmd, stdout=log, stderr=log)
 
-#measure_sim_time()
+measure_sim_time()
 measure_dram_latency_impact()

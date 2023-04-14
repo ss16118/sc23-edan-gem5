@@ -59,8 +59,6 @@ def print_sim_params(params):
         print(f"EDAN: l1i_latency={params.l1i_latency}cycles")
         print(f"EDAN: l1d_size={params.l1d_size}")
         print(f"EDAN: l1d_size={params.l1d_latency}cycles")
-        print(f"EDAN: l2_size={params.l2_size}")
-        print(f"EDAN: l2_size={params.l2_latency}cycles")
     else:
         print("EDAN: Caches disabled.")
 
@@ -78,7 +76,7 @@ def get_sim_params():
     SimpleOpts.add_option("--l1i_latency", nargs="?", default=default_l1i_latency)
     SimpleOpts.add_option("--l2_size", nargs="?", default=default_l2_size)
     SimpleOpts.add_option("--l2_latency", nargs="?", default=default_l2_latency)
-    
+
     return SimpleOpts.parse_args()
 
 
@@ -108,6 +106,7 @@ def init_sim_env(params):
         system.cpu.dcache.connectCPU(system.cpu)
         system.cpu.icache.connectBus(system.membus)
         system.cpu.dcache.connectBus(system.membus)
+#        disable L2
 #        system.l2bus = L2XBar()
 #        system.cpu.icache.connectBus(system.l2bus)
 #        system.cpu.dcache.connectBus(system.l2bus)
